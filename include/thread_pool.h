@@ -105,12 +105,8 @@ public:
                _mutex.UnLock();
                 break;
             }
-            if (_task_queue.empty()) {
+            while (_task_queue.empty()) {
                 _condVar.Wait();
-            }
-            if (_task_queue.empty()) {
-                _mutex.UnLock();
-                continue;
             }
             Task task = _task_queue.top();
             std::cout<<_task_queue.size()<<std::endl;

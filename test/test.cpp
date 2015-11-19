@@ -26,7 +26,7 @@ void test() {
 void test_thread_pool() {
     common::ThreadPool threadPool(10);
     threadPool.Start();
-    for(int i = 0; i<10000000; i++) {
+    for(int i = 0; i<100000; i++) {
         threadPool.AddTask(test);
     }
     while (true) ;
