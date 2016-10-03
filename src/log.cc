@@ -31,7 +31,7 @@ void Logger::Log(const char* fmt, ...) {
     struct tm t;
     localtime_r(&seconds, &t);
     p += snprintf(p, limit - p,
-                  "%04d/%02d/%02d-%02d:%02d:%02d.%06d %lx ",
+                  "%04d/%02d/%02d-%02d:%02d:%02d.%06d %x ",
                   t.tm_year + 1900,
                   t.tm_mon + 1,
                   t.tm_mday,
