@@ -2,24 +2,26 @@
 // Author : zhangfangjie (f22jay@163.com)
 // Date 2016/09/04 10:04:15
 // Breif : simple loger
-#program once
-#include <thread>
-#include <cstdio>
-#include <ctime>
+#ifndef INCLUDE_LOG_H
+#define INCLUDE_LOG_H
+#include <stdio.h>
 
-class Logger
-{
+namespace common {
+class Logger {
  public:
-  Logger();
+  Logger(FILE *file): file_(file) {}
   virtual ~Logger() {}
   void Log(const char* fmt, ...);
-  void SetFile(File *file) {file_ = file;}
+  void SetFile(FILE* file) {file_ = file;}
+
  private:
-  File * file_;
+  FILE* file_;
 };
 
 extern Logger* g_logger;
-#define LOG_INFO(formt, args...) g_logger("%s "format, "info", ##args)
-#define LOG_DEBUG(formt, args...) g_logger("%s "format, "debug", ##args)
-#define LOG_WARNING(formt, args...) g_logger("%s "format, "warning", ##args)
-#define LOG_FATAL(formt, args...) g_logger("%s "format, "fatal", ##args)
+#define LOG_INFO(format, args...)    g_logger->Log("INFO    [%s:%d] "#format, __FILE__, __LINE__,  ##args)
+#define LOG_DEBUG(format, args...)   g_logger->Log("DEBUG   [%s:%d] "#format, __FILE__, __LINE__, ##args)
+#define LOG_WARNING(format, args...) g_logger->Log("WARNING [%s:%d] "#format, __FILE__, __LINE__, ##args)
+#define LOG_FATAL(format, args...)   g_logger->Log("FATAL   [%s:%d] "#format, __FILE__, __LINE__,  ##args)
+} //namespace common
+#endif
