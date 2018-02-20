@@ -5,14 +5,36 @@
 
 #include "log.h"
 #include <stdarg.h>
+#include <string.h>
 #include <time.h>
 #include <sys/time.h>
 #include <sys/syscall.h>
 #include <unistd.h>
 
-namespace common {
+namespace {
+const char* g_level_chars[] = {
+  "DEBUG   ",
+  "INFO    ",
+  "WARNING ",
+  "FATAL   "
+};
+common::Level log_level_threhold = common::INFO;
+}  //
 
-void Logger::Log(const char* fmt, ...) {
+namespace common {
+Logger* Logger::_logger = NULL;
+Logger* Logger::GetLogger() {
+  if (_logger == NULL) {
+    _logger = new Logger(stdout);
+  }
+  return _logger;
+}
+
+void Logger::Log(Level level, const char* fmt, ...) {
+  if (level < log_level_threhold) {
+    return;
+  }
+
   va_list ap;
   va_start(ap, fmt);
   char* buf= new char[500];
@@ -21,10 +43,17 @@ void Logger::Log(const char* fmt, ...) {
   // try twice, if buffer is not enough ,then bigger
   for (int i = 0; i < 2; i++) {
     if (i == 1) {
+      delete[] buf;
       buf = new char[20000];
       limit = buf + 20000;
     }
     char* p = buf;
+
+    //print level
+    int level_len = sizeof(g_level_chars[level]);
+    strncpy(p, g_level_chars[level], level_len);
+    p += level_len;
+
     struct timeval now_tv;
     gettimeofday(&now_tv, NULL);
     const time_t seconds = now_tv.tv_sec;
@@ -43,8 +72,6 @@ void Logger::Log(const char* fmt, ...) {
     va_list backup;
     va_copy(backup, ap);
     p += vsnprintf(p, limit - p, fmt, backup);
-    *p = '\n';
-    p++;
 
     //buf is full
     if (p >= limit) {
@@ -55,11 +82,13 @@ void Logger::Log(const char* fmt, ...) {
         //truncate log msg
       }
     }
-    fwrite(buf, sizeof(char), p - buf, file_);
+    *p = '\n';
+    p++;
+
+    fwrite(buf, sizeof(char), p - buf, _file);
     break;
   }
+  delete[] buf;
 }
 
-FILE *g_log_file = stdout;
-Logger* g_logger = new Logger(g_log_file);
 } //namespace common

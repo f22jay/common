@@ -2,9 +2,14 @@ cmake_minimum_required(VERSION 2.8)
 project(common)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 
-ADD_SUBDIRECTORY(test)
-AUX_SOURCE_DIRECTORY(src DIR_SRC)
-INCLUDE_DIRECTORIES(./include)
+add_subdirectory(test)
+aux_source_directory(src DIR_SRC)
+include_directories(./include)
 
-LINK_LIBRARIES("pthread")
-ADD_LIBRARY(common ${DIR_SRC})
+link_libraries("pthread")
+add_library(common ${DIR_SRC})
+install(DIRECTORY include/ DESTINATION include/common/)
+#include/ will install include/*, result si include/common/*.h
+#include will install include, result si include/common/include
+#install(DIRECTORY include DESTINATION include/common/)
+install(TARGETS common DESTINATION lib/)
