@@ -13,10 +13,10 @@
 
 namespace {
 const char* g_level_chars[] = {
-  "DEBUG   ",
-  "INFO    ",
-  "WARNING ",
-  "FATAL   "
+  "DEBUG",
+  "INFO",
+  "WARNING",
+  "FATAL"
 };
 common::Level log_level_threhold = common::INFO;
 }  //

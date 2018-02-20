@@ -1,7 +1,8 @@
+/* -*- C++ -*- */
 // Copyright maverick Inc. All Rights Reserved.
 // Author : zhangfangjie (f22jay@163.com)
 // Date 2018/02/11 18:06:27
-// Breif : HttpUtil is for aiplat, first use cl5, then use specefic url
+// Breif :
 
 #ifndef __HTTP_UTIL_H__
 #define __HTTP_UTIL_H__
