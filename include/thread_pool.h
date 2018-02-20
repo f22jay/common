@@ -1,3 +1,4 @@
+/* -*- C++ -*- */
 /*==================================
  *   Copyright (C) 2015 All rights reserved.
  *
@@ -10,11 +11,12 @@
 #pragma once
 
 #include <stdint.h>
+#include <iostream>
 #include <vector>
 #include <utility>
 #include <queue>
 #include <string>
-#include <boost/function.hpp>
+#include <functional>
 #include <map>
 #include "mutex.h"
 #include "cond_var.h"
@@ -22,7 +24,7 @@
 
 namespace common {
 struct Task{
-  typedef boost::function<void()> Func;
+  typedef std::function<void()> Func;
   uint64_t _priority;
   Func _func;
   uint64_t _task_id;
